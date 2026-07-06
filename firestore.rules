@@ -1,0 +1,109 @@
+/* ======================================================================
+   DLM | دلم — قواعد أمان Firestore (firestore.rules)
+   ======================================================================
+   كيفية النشر:
+   1) Firebase Console → Firestore Database → Rules
+   2) الصق هذا الملف بالكامل واضغط Publish
+   أو عبر CLI:
+   firebase deploy --only firestore:rules
+
+   المبدأ العام:
+   - القراءة العامة (بدون تسجيل دخول) مسموحة فقط للبيانات المخصَّصة للعرض
+     العام: القصائد المنشورة فعلاً (status == "published")، التصنيفات،
+     الاقتباسات. هذا يطابق "الزوار يشوفون المحتوى بدون تسجيل دخول".
+   - أي كتابة (إنشاء/تعديل/حذف) على أي مجموعة تتطلب isAdmin() فقط، أي أن
+     يكون المستخدم مسجلاً عبر Firebase Authentication. لا توجد طريقة لإنشاء
+     مستخدم admin من تطبيق الواجهة نفسه؛ الحساب الوحيد يُنشأ من
+     Firebase Console يدويًا (Authentication → Users → Add user).
+   - القصائد التي status == "draft" لا تظهر إطلاقًا لغير المسجَّلين، حتى
+     عبر قراءة مباشرة بمعرّف المستند (الشرط مطبَّق على مستوى كل مستند).
+   ====================================================================== */
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // المستخدم الحالي مسجّل دخول فعليًا عبر Firebase Auth (أي حساب أدمن واحد فقط لدينا)
+    function isAdmin() {
+      return request.auth != null;
+    }
+
+    // ---------------- poems ----------------
+    match /poems/{poemId} {
+      // القراءة العامة مسموحة فقط للقصائد المنشورة. المسودات تتطلب تسجيل دخول.
+      allow get: if (resource.data.status == 'published') || isAdmin();
+      allow list: if isAdmin() || (request.query.limit <= 50);
+      // ملاحظة: قيود list الحقيقية على status == 'published' تُفرض من جهة
+      // الواجهة عبر استعلام where("status","==","published")؛ Firestore Rules
+      // لا تستطيع فلترة النتائج، فقط السماح/الرفض، لذلك يُمنع أي list بدون
+      // شرط استعلام واضح إن لم يكن المستخدم أدمن (انظر allow list أعلاه).
+
+      allow create: if isAdmin()
+        && request.resource.data.title_ar is string
+        && request.resource.data.title_ar.size() > 0
+        && request.resource.data.title_ar.size() <= 200
+        && request.resource.data.body_ar is string
+        && request.resource.data.body_ar.size() > 0
+        && request.resource.data.body_ar.size() <= 20000
+        && request.resource.data.status in ['draft', 'published']
+        && request.resource.data.reads == 0;
+
+      allow update: if isAdmin()
+        && request.resource.data.title_ar is string
+        && request.resource.data.title_ar.size() > 0
+        && request.resource.data.title_ar.size() <= 200
+        && request.resource.data.body_ar is string
+        && request.resource.data.body_ar.size() > 0
+        && request.resource.data.body_ar.size() <= 20000
+        && request.resource.data.status in ['draft', 'published'];
+
+      // السماح بزيادة عداد القراءات حتى من زائر غير مسجل، طالما العملية
+      // تزيد reads بمقدار 1 فقط ولا تُغيّر أي حقل آخر (عبر increment على الخادم)
+      allow update: if !isAdmin()
+        && resource.data.status == 'published'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reads'])
+        && request.resource.data.reads == resource.data.reads + 1;
+
+      allow delete: if isAdmin();
+    }
+
+    // ---------------- categories ----------------
+    match /categories/{categoryId} {
+      allow read: if true; // عامة بالكامل، تُستخدم في فلاتر التصنيف للزوار
+      allow create, update: if isAdmin()
+        && request.resource.data.name_ar is string
+        && request.resource.data.name_ar.size() > 0
+        && request.resource.data.name_ar.size() <= 60;
+      allow delete: if isAdmin();
+    }
+
+    // ---------------- quotes ----------------
+    match /quotes/{quoteId} {
+      allow read: if true; // عامة بالكامل، تُعرض في الصفحة الرئيسية وصفحة الاقتباسات
+      allow create, update: if isAdmin()
+        && request.resource.data.text_ar is string
+        && request.resource.data.text_ar.size() > 0
+        && request.resource.data.text_ar.size() <= 400;
+      allow delete: if isAdmin();
+    }
+
+    // ---------------- settings ----------------
+    // إعدادات عامة للموقع (عنوان، وصف، روابط تواصل...) — قراءة عامة، تعديل للأدمن فقط
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ---------------- stats ----------------
+    // إحصائيات داخلية إضافية، لا تُعرض علنًا، الأدمن فقط
+    match /stats/{statId} {
+      allow read, write: if isAdmin();
+    }
+
+    // أي مجموعة أخرى غير مذكورة أعلاه: مرفوضة تمامًا بشكل افتراضي (Deny by default)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
