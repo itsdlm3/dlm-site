@@ -1,64 +1,10 @@
-# ============================================================
-# robots.txt — دلم | ترجمان الشعور
-# https://itsdlm3.github.io/dlm-site/
-# ============================================================
+# robots.txt
+# DLM | ترجمان الشعور
 
 User-agent: *
 Allow: /
 
-# منع الملفات الحساسة فقط
-Disallow: /admin
-Disallow: /dashboard
-Disallow: /firebase.js
-Disallow: /firestore.rules
-Disallow: /storage.rules
-
-# لا تمنع ملفات XML أو sitemap
-
-# Google
-User-agent: Googlebot
-Allow: /
-
-User-agent: Googlebot-Image
-Allow: /
-
-User-agent: Googlebot-News
-Allow: /
-
-# Bing
-User-agent: Bingbot
-Allow: /
-
-# Yandex
-User-agent: YandexBot
-Allow: /
-
-# DuckDuckGo
-User-agent: DuckDuckBot
-Allow: /
-
-# Apple
-User-agent: Applebot
-Allow: /
-
-# Facebook
-User-agent: facebookexternalhit
-Allow: /
-
-# Twitter/X
-User-agent: Twitterbot
-Allow: /
-
-# WhatsApp
-User-agent: WhatsApp
-Allow: /
-
-# Telegram
-User-agent: TelegramBot
-Allow: /
-
-# LinkedIn
-User-agent: LinkedInBot
-Allow: /
+Disallow: /admin/
+Disallow: /dashboard/
 
 Sitemap: https://itsdlm3.github.io/dlm-site/sitemap.xml
