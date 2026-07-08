@@ -1,19 +1,132 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  =============================================================
+  sitemap.xml — دلم | ترجمان الشعور
+  https://itsdlm3.github.io/dlm-site/
+  آخر تحديث: 2026-07-08
+  =============================================================
+  بنية الموقع (مكتشفة من المراجعة الفعلية):
+  - SPA واحدة: index.html
+  - التنقل بالكامل عبر JavaScript (لا routing خادم)
+  - الأقسام الرئيسية: ?page=poems | categories | quotes | about
+  - الصفحات القانونية مدمجة داخل الصفحة الرئيسية
+  - القصائد الفردية: ?poem={FIRESTORE_ID}
+  =============================================================
+  متوافق مع:
+  - Google Search Console
+  - Bing Webmaster Tools
+  - https://www.sitemaps.org/protocol.html
+  =============================================================
+-->
 <urlset
-    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-    xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+>
+
+  <!-- ===================================================
+       الصفحة الرئيسية
+       الأعلى أولوية — تتغير بشكل يومي مع نشر قصائد جديدة
+       =================================================== -->
+  <url>
+    <loc>https://itsdlm3.github.io/dlm-site/</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://itsdlm3.github.io/dlm-site/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://itsdlm3.github.io/dlm-site/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://itsdlm3.github.io/dlm-site/"/>
+  </url>
+
+  <!-- ===================================================
+       أرشيف القصائد — يتغير مع كل قصيدة جديدة
+       =================================================== -->
+  <url>
+    <loc>https://itsdlm3.github.io/dlm-site/?page=poems</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://itsdlm3.github.io/dlm-site/?page=poems"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://itsdlm3.github.io/dlm-site/?page=poems&amp;lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://itsdlm3.github.io/dlm-site/?page=poems"/>
+  </url>
+
+  <!-- ===================================================
+       التصنيفات — يتغير عند إضافة تصنيف جديد
+       =================================================== -->
+  <url>
+    <loc>https://itsdlm3.github.io/dlm-site/?page=categories</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://itsdlm3.github.io/dlm-site/?page=categories"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://itsdlm3.github.io/dlm-site/?page=categories&amp;lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://itsdlm3.github.io/dlm-site/?page=categories"/>
+  </url>
+
+  <!-- ===================================================
+       الاقتباسات — يتغير عند إضافة اقتباس جديد
+       =================================================== -->
+  <url>
+    <loc>https://itsdlm3.github.io/dlm-site/?page=quotes</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://itsdlm3.github.io/dlm-site/?page=quotes"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://itsdlm3.github.io/dlm-site/?page=quotes&amp;lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://itsdlm3.github.io/dlm-site/?page=quotes"/>
+  </url>
+
+  <!-- ===================================================
+       عن الشاعر — نادرًا ما يتغير
+       =================================================== -->
+  <url>
+    <loc>https://itsdlm3.github.io/dlm-site/?page=about</loc>
+    <lastmod>2026-07-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://itsdlm3.github.io/dlm-site/?page=about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://itsdlm3.github.io/dlm-site/?page=about&amp;lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://itsdlm3.github.io/dlm-site/?page=about"/>
+  </url>
+
+  <!-- ===================================================
+       سياسة الخصوصية — آخر تحديث: 3 يوليو 2026
+       =================================================== -->
+  <url>
+    <loc>https://itsdlm3.github.io/dlm-site/?page=privacy</loc>
+    <lastmod>2026-07-03</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <!-- ===================================================
+       الشروط والأحكام
+       =================================================== -->
+  <url>
+    <loc>https://itsdlm3.github.io/dlm-site/?page=terms</loc>
+    <lastmod>2026-07-03</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <!-- ===================================================
+       القصائد الفردية
+       =================================================== -->
+  <!--
+    أضف قصيدة لكل URL بهذا الشكل بعد نشرها في Firebase:
 
     <url>
-        <loc>https://itsdlm3.github.io/dlm-site/</loc>
-        <lastmod>2026-07-07</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>1.0</priority>
-
-        <image:image>
-            <image:loc>https://itsdlm3.github.io/dlm-site/logo.png</image:loc>
-            <image:title>دلم | ترجمان الشعور</image:title>
-            <image:caption>منصة دلم للشعر والخواطر والاقتباسات.</image:caption>
-        </image:image>
+      <loc>https://itsdlm3.github.io/dlm-site/?poem=FIRESTORE_DOCUMENT_ID</loc>
+      <lastmod>YYYY-MM-DD</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.85</priority>
+      <image:image>
+        <image:loc>https://firebasestorage.googleapis.com/BUCKET/covers/ID/cover.jpg</image:loc>
+        <image:title>عنوان القصيدة — دلم</image:title>
+        <image:caption>قصيدة للشاعر دلم — ترجمان الشعور</image:caption>
+      </image:image>
     </url>
+  -->
 
 </urlset>
