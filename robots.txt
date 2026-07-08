@@ -1,10 +1,83 @@
-# robots.txt
-# DLM | ترجمان الشعور
+# =======================================================
+# robots.txt — دلم | ترجمان الشعور
+# https://itsdlm3.github.io/dlm-site/
+# آخر تحديث: 2026-07-08
+# معيار: https://developers.google.com/search/docs/crawling-indexing/robots/intro
+# =======================================================
+# الموقع: SPA (Single Page Application) مبني بـ HTML + Firebase
+# التنقل: JavaScript — لا يوجد routing على مستوى الخادم
+# =======================================================
 
+# -------------------------------------------------------
+# قاعدة عامة: السماح لجميع محركات البحث
+# -------------------------------------------------------
 User-agent: *
 Allow: /
 
-Disallow: /admin/
-Disallow: /dashboard/
+# منع فهرسة الملفات التقنية التي لا قيمة لها في نتائج البحث
+Disallow: /firebase.js
 
+# منع فهرسة ملف الصوت (غير مفيد كنتيجة بحث مستقلة)
+Disallow: /DLM.mp3
+
+# -------------------------------------------------------
+# Googlebot — أهم محرك، أعلى أولوية
+# -------------------------------------------------------
+User-agent: Googlebot
+Allow: /
+Disallow: /firebase.js
+Disallow: /DLM.mp3
+
+# السماح لـ Googlebot بالوصول لصور الموقع (أغلفة القصائد)
+User-agent: Googlebot-Image
+Allow: /
+
+# -------------------------------------------------------
+# Bing
+# -------------------------------------------------------
+User-agent: Bingbot
+Allow: /
+Disallow: /firebase.js
+Disallow: /DLM.mp3
+
+# -------------------------------------------------------
+# محركات بحث أخرى
+# -------------------------------------------------------
+User-agent: YandexBot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# -------------------------------------------------------
+# عناكب معاينة روابط التواصل الاجتماعي
+# (ضرورية لظهور معاينة جميلة عند مشاركة القصائد)
+# -------------------------------------------------------
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Slackbot
+Allow: /
+
+User-agent: Snapchat
+Allow: /
+
+# -------------------------------------------------------
+# رابط خريطة الموقع
+# -------------------------------------------------------
 Sitemap: https://itsdlm3.github.io/dlm-site/sitemap.xml
